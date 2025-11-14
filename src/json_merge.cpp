@@ -1,4 +1,5 @@
 #include "json2doc/json_merge.h"
+#include "json2doc/xml_document.h"
 #include <fstream>
 #include <sstream>
 #include <algorithm>
@@ -78,7 +79,7 @@ namespace json2doc
         while (std::regex_search(searchStart, result.cend(), match, varRegex))
         {
             lastStats_["found"]++;
-            
+
             std::string varName = trim(match[1].str());
             std::string value = getValue(varName);
 
@@ -368,6 +369,52 @@ namespace json2doc
     {
         // This is a helper method for future enhancements
         return "";
+    }
+
+    // ========== XML-based methods implementation ==========
+
+    int JsonMerge::mergeIntoXml(XmlDocument &xmlDoc) const
+    {
+        if (!xmlDoc.isValid())
+        {
+            return 0;
+        }
+
+        return xmlDoc.replaceVariables(jsonData_);
+    }
+
+    std::vector<std::string> JsonMerge::findTemplateNodesInXml(const XmlDocument &xmlDoc) const
+    {
+        std::vector<std::string> results;
+
+        if (!xmlDoc.isValid())
+        {
+            return results;
+        }
+
+        auto templateNodes = xmlDoc.findTemplateNodes();
+        for (const auto &node : templateNodes)
+        {
+            results.push_back(node.path);
+        }
+
+        return results;
+    }
+
+    int JsonMerge::replaceVariablesInXml(XmlDocument &xmlDoc, const std::string &xpath) const
+    {
+        if (!xmlDoc.isValid())
+        {
+            return 0;
+        }
+
+        // Use XmlDocument's built-in variable replacement
+        return xmlDoc.replaceVariables(jsonData_);
+    }
+
+    std::map<std::string, std::string> JsonMerge::getVariableMap() const
+    {
+        return jsonData_;
     }
 
 } // namespace json2doc

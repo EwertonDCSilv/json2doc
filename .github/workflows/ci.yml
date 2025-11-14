@@ -17,7 +17,7 @@ jobs:
       - name: Install dependencies
         run: |
           sudo apt-get update
-          sudo apt-get install -y g++ make unzip zip
+          sudo apt-get install -y g++ make unzip zip libpugixml-dev
 
       - name: Build project
         run: make all
@@ -42,6 +42,12 @@ jobs:
 
       - name: Test JsonMerge with DocxReader integration
         run: ./bin/test_json_merge_docx
+
+      - name: Run XmlDocument tests
+        run: make test-xml
+
+      - name: Test XmlDocument + JsonMerge integration
+        run: ./bin/test_xml_integration
 
       - name: Archive test artifacts
         if: always()

@@ -4,6 +4,13 @@
 #include <string>
 #include <vector>
 #include <map>
+#include <memory>
+
+// Forward declaration
+namespace json2doc
+{
+    class XmlDocument;
+}
 
 namespace json2doc
 {
@@ -16,6 +23,8 @@ namespace json2doc
      * - Finding {{variable}} placeholders in XML content
      * - Replacing placeholders with corresponding JSON values
      * - Supporting nested JSON structures with dot notation (e.g., {{metadata.version}})
+     * - Working with parsed XML documents via XmlDocument class
+     * - XPath-based XML manipulation
      */
     class JsonMerge
     {
@@ -106,6 +115,40 @@ namespace json2doc
          * @brief Clear all loaded JSON data
          */
         void clear();
+
+        // ========== XML-based methods ==========
+
+        /**
+         * @brief Merge JSON data into an XmlDocument
+         *
+         * @param xmlDoc The XmlDocument to merge data into
+         * @return int Number of variables replaced
+         */
+        int mergeIntoXml(XmlDocument &xmlDoc) const;
+
+        /**
+         * @brief Find all template nodes in XML document
+         *
+         * @param xmlDoc The XmlDocument to search
+         * @return std::vector<std::string> List of XPath expressions to nodes with {{variables}}
+         */
+        std::vector<std::string> findTemplateNodesInXml(const XmlDocument &xmlDoc) const;
+
+        /**
+         * @brief Replace variables in XML using XPath
+         *
+         * @param xmlDoc The XmlDocument to modify
+         * @param xpath XPath expression to select nodes
+         * @return int Number of replacements made
+         */
+        int replaceVariablesInXml(XmlDocument &xmlDoc, const std::string &xpath = "//*") const;
+
+        /**
+         * @brief Get variable map for XmlDocument operations
+         *
+         * @return std::map<std::string, std::string> Map of all JSON variables
+         */
+        std::map<std::string, std::string> getVariableMap() const;
 
     private:
         std::map<std::string, std::string> jsonData_;
