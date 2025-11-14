@@ -55,3 +55,6 @@ cmake_install.cmake
 *.swp
 *.swo
 *~
+
+# CodeQL
+_codeql_detected_source_root/
