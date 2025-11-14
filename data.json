@@ -1,0 +1,27 @@
+{
+    "title": "Sample Document",
+    "author": "John Doe",
+    "date": "November 14, 2025",
+    "content": "This is a sample document generated using JSON2Doc converter.",
+    "sections": [
+        {
+            "heading": "Introduction",
+            "text": "This section demonstrates how JSON data can be mapped to document templates."
+        },
+        {
+            "heading": "Features",
+            "text": "JSON2Doc supports various data types and nested structures for document generation."
+        },
+        {
+            "heading": "Conclusion",
+            "text": "This example shows the power of template-based document generation."
+        }
+    ],
+    "name": "Ewerton Silva Santos",
+    "position": "Software Engineer",
+    "metadata": {
+        "version": "1.0.0",
+        "type": "example",
+        "status": "draft"
+    }
+}

@@ -1,46 +1,126 @@
 #include <iostream>
+#include <string>
+#include <cstring>
+#include <fstream>
+#include <sstream>
 #include "json2doc/json2doc.h"
 #include "json2doc/converter.h"
+#include "json2doc/help.h"
+#include "json2doc/args_parser.h"
 
-int main() {
-    std::cout << "JSON2Doc Library Example\n";
-    std::cout << "========================\n\n";
-
-    // Create an instance of Json2Doc
+int main(int argc, char *argv[])
+{
+    // Variable declarations (hoisting)
     json2doc::Json2Doc converter;
-    
-    // Display version
-    std::cout << "Library Version: " << converter.getVersion() << "\n\n";
+    std::string jsonData;
+    std::string templatePath;
+    std::string jsonFilePath;
+    std::string result;
+    std::ifstream jsonFile;
+    std::stringstream buffer;
 
-    // Example JSON data
-    std::string jsonData = R"({
-        "title": "Sample Document",
-        "author": "John Doe",
-        "content": "This is a sample document."
-    })";
+    // Parse arguments
+    json2doc::ArgsParser args(argc, argv);
+
+    // Check for help flag
+    if (args.hasFlag("help"))
+    {
+        std::cout << json2doc::Help::getHelpMessage();
+        return 0;
+    }
+
+    // Check for version flag
+    if (args.hasFlag("version"))
+    {
+        std::cout << "JSON2Doc version " << converter.getVersion() << "\n";
+        return 0;
+    }
+
+    // Check if arguments are valid
+    if (!args.isValid())
+    {
+        std::cerr << "❌ Error: " << args.getErrorMessage() << "\n\n";
+        std::cerr << json2doc::Help::getUsageMessage(argv[0]);
+        std::cerr << "\nTip: Use --help for more information\n";
+        return 1;
+    }
+
+    // Get required options
+    templatePath = args.getValue("doc");
+    if (templatePath.empty())
+    {
+        templatePath = args.getValue("d");
+    }
+
+    jsonFilePath = args.getValue("json");
+    if (jsonFilePath.empty())
+    {
+        jsonFilePath = args.getValue("j");
+    }
+
+    // Validate required options
+    if (templatePath.empty() || jsonFilePath.empty())
+    {
+        std::cerr << "❌ Error: Missing required arguments\n\n";
+        std::cerr << json2doc::Help::getUsageMessage(argv[0]);
+        std::cerr << "\nTip: Both --doc and --json are required\n";
+        return 1;
+    }
+
+    std::cout << "┌────────────────────────────────────────┐\n";
+    std::cout << "│      JSON2Doc - Document Converter     │\n";
+    std::cout << "└────────────────────────────────────────┘\n\n";
+
+    // Display version
+    std::cout << "📦 Version: " << converter.getVersion() << "\n\n";
+
+    // Read JSON file
+    std::cout << "📂 Reading JSON file: " << jsonFilePath << "\n";
+    jsonFile.open(jsonFilePath);
+    if (!jsonFile.is_open())
+    {
+        std::cerr << "✗ Failed to open JSON file: " << jsonFilePath << "\n";
+        return 1;
+    }
+
+    buffer << jsonFile.rdbuf();
+    jsonData = buffer.str();
+    jsonFile.close();
+    std::cout << "✓ JSON file loaded\n";
 
     // Validate JSON
-    if (json2doc::Converter::isValidJson(jsonData)) {
-        std::cout << "JSON is valid\n";
-    } else {
-        std::cout << "JSON is invalid\n";
+    if (json2doc::Converter::isValidJson(jsonData))
+    {
+        std::cout << "✓ JSON is valid\n";
+    }
+    else
+    {
+        std::cerr << "✗ JSON is invalid\n";
         return 1;
     }
 
     // Load JSON data
-    if (converter.loadJson(jsonData)) {
-        std::cout << "JSON loaded successfully\n\n";
-    } else {
-        std::cout << "Failed to load JSON\n";
+    if (converter.loadJson(jsonData))
+    {
+        std::cout << "✓ JSON loaded successfully\n\n";
+    }
+    else
+    {
+        std::cerr << "✗ Failed to load JSON\n";
         return 1;
     }
 
     // Convert to document
-    std::string templatePath = "template.docx";
-    std::string result = converter.convertToDocument(templatePath);
-    
+    std::cout << "📄 Template: " << templatePath << "\n";
+    std::cout << "🔄 Converting...\n\n";
+
+    result = converter.convertToDocument(templatePath);
+
+    std::cout << "─────────────────────────────────────────\n";
     std::cout << "Conversion Result:\n";
     std::cout << result << "\n";
+    std::cout << "─────────────────────────────────────────\n";
+    std::cout << "\n✨ Done!\n";
 
     return 0;
 }
