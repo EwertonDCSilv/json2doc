@@ -43,7 +43,6 @@
 # Build directories
 build/
 bin/
-lib/
 cmake-build-*/
 CMakeFiles/
 CMakeCache.txt

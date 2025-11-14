@@ -16,19 +16,16 @@ json2doc is a C++ library designed to convert JSON data into various document fo
 ### Build Instructions
 
 ```bash
-# Build the library
-make lib
+# Build the main program
+make main
 
 # Build and run tests
 make test
 
-# Build examples
-make example
-
-# Build everything (library, tests, and examples)
+# Build everything (main program and tests)
 make all
 
-# Run the example program
+# Run the main program
 make run
 
 # Clean build artifacts
@@ -37,11 +34,10 @@ make clean
 
 ### Build Targets
 
-- `lib`: Build the static library (libjson2doc.a)
+- `main`: Build the main program
 - `test`: Build and run the test suite
-- `example`: Build the example programs
-- `all`: Build library, tests, and examples
-- `run`: Run the example program
+- `all`: Build main program and tests
+- `run`: Run the main program
 - `clean`: Remove all build artifacts
 
 ## Usage
@@ -63,14 +59,14 @@ int main() {
 }
 ```
 
-### Running Examples
+### Running the Program
 
-After building, you can run the example program:
+After building, you can run the main program:
 
 ```bash
 make run
 # or directly:
-./bin/example_usage
+./bin/main
 ```
 
 ## Project Structure
@@ -80,7 +76,8 @@ json2doc/
 ├── include/          # Public header files
 │   └── json2doc/
 ├── src/              # Source files
-├── examples/         # Example programs
+├── program/          # Main program
+│   └── main.cpp
 ├── tests/            # Test files
 ├── Makefile          # Build configuration
 └── README.md         # This file
@@ -88,7 +85,6 @@ json2doc/
 
 Build artifacts are placed in:
 - `build/` - Object files
-- `lib/` - Compiled library (libjson2doc.a)
 - `bin/` - Executable binaries
 
 ## License
