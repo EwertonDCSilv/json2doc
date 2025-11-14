@@ -129,6 +129,82 @@ namespace json2doc
         return xmlContent_;
     }
 
+    bool DocxReader::writeDocumentXml(const std::string &xmlContent)
+    {
+        if (tempPath_.empty())
+        {
+            lastError_ = "File not decompressed yet";
+            return false;
+        }
+
+        // The main document is at word/document.xml
+        std::string documentPath = tempPath_ + "/word/document.xml";
+
+        std::ofstream xmlFile(documentPath);
+        if (!xmlFile.is_open())
+        {
+            lastError_ = "Failed to open document.xml for writing at: " + documentPath;
+            return false;
+        }
+
+        xmlFile << xmlContent;
+        xmlFile.close();
+
+        // Update internal cache
+        xmlContent_ = xmlContent;
+
+        return true;
+    }
+
+    bool DocxReader::recompress(const std::string &outputPath)
+    {
+        if (tempPath_.empty())
+        {
+            lastError_ = "No temporary directory to compress";
+            return false;
+        }
+
+        // Convert output path to absolute if it's relative
+        std::string absOutputPath = outputPath;
+        if (outputPath[0] != '/')
+        {
+            // Get current working directory
+            char cwd[1024];
+            if (getcwd(cwd, sizeof(cwd)) != nullptr)
+            {
+                absOutputPath = std::string(cwd) + "/" + outputPath;
+            }
+        }
+
+        // Change to temp directory and zip contents
+        // We need to zip from inside the temp directory to avoid including the temp path itself
+        std::string command = "cd \"" + tempPath_ + "\" && zip -q -r \"" + absOutputPath + "\" . 2>&1";
+
+        FILE *pipe = popen(command.c_str(), "r");
+        if (!pipe)
+        {
+            lastError_ = "Failed to execute zip command";
+            return false;
+        }
+
+        char buffer[256];
+        std::string result = "";
+        while (fgets(buffer, sizeof(buffer), pipe) != nullptr)
+        {
+            result += buffer;
+        }
+
+        int status = pclose(pipe);
+
+        if (status != 0)
+        {
+            lastError_ = "Zip failed: " + result;
+            return false;
+        }
+
+        return true;
+    }
+
     std::vector<std::string> DocxReader::extractTagContent(const std::string &xml, const std::string &tag)
     {
         std::vector<std::string> results;

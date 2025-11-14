@@ -1,0 +1,354 @@
+{
+    "items": [
+        {
+            "id": "001",
+            "description": "Notebook Dell Inspiron 15",
+            "quantity": "2",
+            "unit_value": "R$ 3.500,00",
+            "total_value": "R$ 7.000,00"
+        },
+        {
+            "id": "002",
+            "description": "Mouse Logitech MX Master 3",
+            "quantity": "5",
+            "unit_value": "R$ 450,00",
+            "total_value": "R$ 2.250,00"
+        },
+        {
+            "id": "003",
+            "description": "Teclado Mecânico Keychron K2",
+            "quantity": "3",
+            "unit_value": "R$ 650,00",
+            "total_value": "R$ 1.950,00"
+        },
+        {
+            "id": "004",
+            "description": "Monitor LG UltraWide 29\"",
+            "quantity": "4",
+            "unit_value": "R$ 1.800,00",
+            "total_value": "R$ 7.200,00"
+        },
+        {
+            "id": "005",
+            "description": "Webcam Logitech C920",
+            "quantity": "6",
+            "unit_value": "R$ 550,00",
+            "total_value": "R$ 3.300,00"
+        },
+        {
+            "id": "006",
+            "description": "Headset HyperX Cloud II",
+            "quantity": "8",
+            "unit_value": "R$ 400,00",
+            "total_value": "R$ 3.200,00"
+        },
+        {
+            "id": "007",
+            "description": "SSD Samsung 970 EVO 1TB",
+            "quantity": "10",
+            "unit_value": "R$ 800,00",
+            "total_value": "R$ 8.000,00"
+        },
+        {
+            "id": "008",
+            "description": "Memória RAM DDR4 16GB",
+            "quantity": "15",
+            "unit_value": "R$ 350,00",
+            "total_value": "R$ 5.250,00"
+        },
+        {
+            "id": "009",
+            "description": "Placa de Vídeo RTX 3060",
+            "quantity": "3",
+            "unit_value": "R$ 2.500,00",
+            "total_value": "R$ 7.500,00"
+        },
+        {
+            "id": "010",
+            "description": "Processador AMD Ryzen 7",
+            "quantity": "5",
+            "unit_value": "R$ 1.800,00",
+            "total_value": "R$ 9.000,00"
+        },
+        {
+            "id": "011",
+            "description": "Cadeira Gamer DXRacer",
+            "quantity": "7",
+            "unit_value": "R$ 1.200,00",
+            "total_value": "R$ 8.400,00"
+        },
+        {
+            "id": "012",
+            "description": "Mesa Digitalizadora Wacom",
+            "quantity": "4",
+            "unit_value": "R$ 1.500,00",
+            "total_value": "R$ 6.000,00"
+        },
+        {
+            "id": "013",
+            "description": "Hub USB-C 7 Portas",
+            "quantity": "12",
+            "unit_value": "R$ 200,00",
+            "total_value": "R$ 2.400,00"
+        },
+        {
+            "id": "014",
+            "description": "Fonte Corsair 750W Modular",
+            "quantity": "6",
+            "unit_value": "R$ 650,00",
+            "total_value": "R$ 3.900,00"
+        },
+        {
+            "id": "015",
+            "description": "Gabinete NZXT H510",
+            "quantity": "8",
+            "unit_value": "R$ 550,00",
+            "total_value": "R$ 4.400,00"
+        },
+        {
+            "id": "016",
+            "description": "Cooler CPU Noctua NH-D15",
+            "quantity": "9",
+            "unit_value": "R$ 500,00",
+            "total_value": "R$ 4.500,00"
+        },
+        {
+            "id": "017",
+            "description": "Placa Mãe ASUS ROG Strix",
+            "quantity": "4",
+            "unit_value": "R$ 1.600,00",
+            "total_value": "R$ 6.400,00"
+        },
+        {
+            "id": "018",
+            "description": "Switch Mecânico Cherry MX",
+            "quantity": "20",
+            "unit_value": "R$ 50,00",
+            "total_value": "R$ 1.000,00"
+        },
+        {
+            "id": "019",
+            "description": "Mousepad Gamer XL",
+            "quantity": "25",
+            "unit_value": "R$ 80,00",
+            "total_value": "R$ 2.000,00"
+        },
+        {
+            "id": "020",
+            "description": "Suporte Monitor Duplo",
+            "quantity": "11",
+            "unit_value": "R$ 300,00",
+            "total_value": "R$ 3.300,00"
+        },
+        {
+            "id": "021",
+            "description": "Cabo HDMI 2.1 Premium",
+            "quantity": "30",
+            "unit_value": "R$ 60,00",
+            "total_value": "R$ 1.800,00"
+        },
+        {
+            "id": "022",
+            "description": "Filtro de Linha 8 Tomadas",
+            "quantity": "18",
+            "unit_value": "R$ 120,00",
+            "total_value": "R$ 2.160,00"
+        },
+        {
+            "id": "023",
+            "description": "Roteador TP-Link AX3000",
+            "quantity": "5",
+            "unit_value": "R$ 700,00",
+            "total_value": "R$ 3.500,00"
+        },
+        {
+            "id": "024",
+            "description": "Impressora HP LaserJet",
+            "quantity": "3",
+            "unit_value": "R$ 1.900,00",
+            "total_value": "R$ 5.700,00"
+        },
+        {
+            "id": "025",
+            "description": "Scanner Canon LiDE 400",
+            "quantity": "4",
+            "unit_value": "R$ 850,00",
+            "total_value": "R$ 3.400,00"
+        },
+        {
+            "id": "026",
+            "description": "Notebook Stand Alumínio",
+            "quantity": "14",
+            "unit_value": "R$ 150,00",
+            "total_value": "R$ 2.100,00"
+        },
+        {
+            "id": "027",
+            "description": "Luz de Preenchimento LED",
+            "quantity": "10",
+            "unit_value": "R$ 250,00",
+            "total_value": "R$ 2.500,00"
+        },
+        {
+            "id": "028",
+            "description": "Microfone Blue Yeti",
+            "quantity": "6",
+            "unit_value": "R$ 900,00",
+            "total_value": "R$ 5.400,00"
+        },
+        {
+            "id": "029",
+            "description": "Interface de Áudio Focusrite",
+            "quantity": "5",
+            "unit_value": "R$ 1.100,00",
+            "total_value": "R$ 5.500,00"
+        },
+        {
+            "id": "030",
+            "description": "Caixa de Som Studio Monitor",
+            "quantity": "8",
+            "unit_value": "R$ 1.300,00",
+            "total_value": "R$ 10.400,00"
+        },
+        {
+            "id": "031",
+            "description": "HD Externo 4TB WD",
+            "quantity": "12",
+            "unit_value": "R$ 600,00",
+            "total_value": "R$ 7.200,00"
+        },
+        {
+            "id": "032",
+            "description": "Pendrive 128GB USB 3.0",
+            "quantity": "40",
+            "unit_value": "R$ 80,00",
+            "total_value": "R$ 3.200,00"
+        },
+        {
+            "id": "033",
+            "description": "Adaptador Wi-Fi USB",
+            "quantity": "22",
+            "unit_value": "R$ 90,00",
+            "total_value": "R$ 1.980,00"
+        },
+        {
+            "id": "034",
+            "description": "Leitor de Cartão SD",
+            "quantity": "16",
+            "unit_value": "R$ 70,00",
+            "total_value": "R$ 1.120,00"
+        },
+        {
+            "id": "035",
+            "description": "Organizador de Cabos",
+            "quantity": "35",
+            "unit_value": "R$ 40,00",
+            "total_value": "R$ 1.400,00"
+        },
+        {
+            "id": "036",
+            "description": "Limpador Ar Comprimido",
+            "quantity": "28",
+            "unit_value": "R$ 45,00",
+            "total_value": "R$ 1.260,00"
+        },
+        {
+            "id": "037",
+            "description": "Pasta Térmica Arctic MX-4",
+            "quantity": "20",
+            "unit_value": "R$ 60,00",
+            "total_value": "R$ 1.200,00"
+        },
+        {
+            "id": "038",
+            "description": "Kit Ferramentas Precisão",
+            "quantity": "15",
+            "unit_value": "R$ 120,00",
+            "total_value": "R$ 1.800,00"
+        },
+        {
+            "id": "039",
+            "description": "Multímetro Digital",
+            "quantity": "7",
+            "unit_value": "R$ 180,00",
+            "total_value": "R$ 1.260,00"
+        },
+        {
+            "id": "040",
+            "description": "Estabilizador 1000VA",
+            "quantity": "9",
+            "unit_value": "R$ 350,00",
+            "total_value": "R$ 3.150,00"
+        },
+        {
+            "id": "041",
+            "description": "No-Break 1500VA",
+            "quantity": "6",
+            "unit_value": "R$ 800,00",
+            "total_value": "R$ 4.800,00"
+        },
+        {
+            "id": "042",
+            "description": "Rack Servidor 42U",
+            "quantity": "2",
+            "unit_value": "R$ 3.500,00",
+            "total_value": "R$ 7.000,00"
+        },
+        {
+            "id": "043",
+            "description": "Switch Gigabit 24 Portas",
+            "quantity": "3",
+            "unit_value": "R$ 1.200,00",
+            "total_value": "R$ 3.600,00"
+        },
+        {
+            "id": "044",
+            "description": "Patch Panel Cat6 24P",
+            "quantity": "5",
+            "unit_value": "R$ 250,00",
+            "total_value": "R$ 1.250,00"
+        },
+        {
+            "id": "045",
+            "description": "Cabo de Rede Cat6 305m",
+            "quantity": "4",
+            "unit_value": "R$ 450,00",
+            "total_value": "R$ 1.800,00"
+        },
+        {
+            "id": "046",
+            "description": "Conector RJ45 100un",
+            "quantity": "10",
+            "unit_value": "R$ 80,00",
+            "total_value": "R$ 800,00"
+        },
+        {
+            "id": "047",
+            "description": "Alicate Crimpador",
+            "quantity": "8",
+            "unit_value": "R$ 150,00",
+            "total_value": "R$ 1.200,00"
+        },
+        {
+            "id": "048",
+            "description": "Testador de Cabo RJ45",
+            "quantity": "6",
+            "unit_value": "R$ 120,00",
+            "total_value": "R$ 720,00"
+        },
+        {
+            "id": "049",
+            "description": "Etiquetadora Portátil",
+            "quantity": "5",
+            "unit_value": "R$ 200,00",
+            "total_value": "R$ 1.000,00"
+        },
+        {
+            "id": "050",
+            "description": "Fita Isolante Kit 10un",
+            "quantity": "12",
+            "unit_value": "R$ 50,00",
+            "total_value": "R$ 600,00"
+        }
+    ]
+}

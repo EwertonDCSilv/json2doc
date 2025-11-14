@@ -105,7 +105,38 @@ namespace json2doc
                     XmlNode xmlNode;
                     xmlNode.name = node.name();
                     xmlNode.value = node.text().as_string();
-                    xmlNode.path = xpath;
+
+                    // Build unique XPath for this specific node
+                    // Count preceding siblings with same name to get position
+                    int position = 1;
+                    for (pugi::xml_node sibling = node.previous_sibling(node.name()); sibling; sibling = sibling.previous_sibling(node.name()))
+                    {
+                        position++;
+                    }
+
+                    // Build path from root to this node
+                    std::string nodePath;
+                    pugi::xml_node current = node;
+                    while (current && current.type() != pugi::node_document)
+                    {
+                        int siblingPos = 1;
+                        for (pugi::xml_node sib = current.previous_sibling(current.name()); sib; sib = sib.previous_sibling(current.name()))
+                        {
+                            siblingPos++;
+                        }
+
+                        std::string part = "/";
+                        part += current.name();
+                        if (siblingPos > 1 || current.next_sibling(current.name()))
+                        {
+                            part += "[" + std::to_string(siblingPos) + "]";
+                        }
+
+                        nodePath = part + nodePath;
+                        current = current.parent();
+                    }
+
+                    xmlNode.path = nodePath;
 
                     // Get full text including children
                     std::ostringstream oss;
@@ -484,6 +515,125 @@ namespace json2doc
     bool XmlDocument::isValid() const
     {
         return pImpl_->valid;
+    }
+
+    std::string XmlDocument::getNodeXml(const std::string &xpath) const
+    {
+        if (!pImpl_->valid)
+        {
+            return "";
+        }
+
+        try
+        {
+            pugi::xpath_node xpathNode = pImpl_->doc.select_node(xpath.c_str());
+            pugi::xml_node node = xpathNode.node();
+
+            if (node)
+            {
+                std::ostringstream oss;
+                node.print(oss, "", pugi::format_raw);
+                return oss.str();
+            }
+        }
+        catch (const pugi::xpath_exception &)
+        {
+            // Ignore errors in const method
+        }
+
+        return "";
+    }
+
+    bool XmlDocument::replaceNode(const std::string &xpath, const std::string &newXml)
+    {
+        if (!pImpl_->valid)
+        {
+            return false;
+        }
+
+        try
+        {
+            pugi::xpath_node xpathNode = pImpl_->doc.select_node(xpath.c_str());
+            pugi::xml_node node = xpathNode.node();
+
+            if (node)
+            {
+                pugi::xml_node parent = node.parent();
+                if (!parent)
+                {
+                    return false;
+                }
+
+                // Parse new XML
+                pugi::xml_document tempDoc;
+                pugi::xml_parse_result result = tempDoc.load_string(newXml.c_str(), pugi::parse_default | pugi::parse_fragment);
+
+                if (!result)
+                {
+                    lastError_ = "Invalid XML in replaceNode";
+                    return false;
+                }
+
+                // Insert new nodes before the old node
+                for (pugi::xml_node child : tempDoc.children())
+                {
+                    parent.insert_copy_before(child, node);
+                }
+
+                // Remove old node
+                parent.remove_child(node);
+
+                return true;
+            }
+        }
+        catch (const pugi::xpath_exception &e)
+        {
+            lastError_ = std::string("XPath error: ") + e.what();
+        }
+
+        return false;
+    }
+
+    std::string XmlDocument::getTextContent(const std::string &xpath) const
+    {
+        if (!pImpl_->valid)
+        {
+            return "";
+        }
+
+        try
+        {
+            pugi::xpath_node xpathNode = pImpl_->doc.select_node(xpath.c_str());
+            pugi::xml_node node = xpathNode.node();
+
+            if (node)
+            {
+                std::string result;
+                std::function<void(const pugi::xml_node &)> collectText = [&](const pugi::xml_node &n)
+                {
+                    for (const auto &child : n.children())
+                    {
+                        if (child.type() == pugi::node_pcdata || child.type() == pugi::node_cdata)
+                        {
+                            result += child.value();
+                        }
+                        else
+                        {
+                            collectText(child);
+                        }
+                    }
+                };
+
+                collectText(node);
+                return result;
+            }
+        }
+        catch (const pugi::xpath_exception &)
+        {
+            // Ignore errors in const method
+        }
+
+        return "";
     }
 
     std::string XmlDocument::getLastError() const

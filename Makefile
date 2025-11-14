@@ -94,6 +94,11 @@ simple-merge: $(OBJECTS)
 	@mkdir -p $(BINDIR)
 	$(CC) $(CFLAGS) $(INC) $(PRGDIR)/simple_merge_example.cpp $^ $(LIBS) -o $(BINDIR)/simple_merge_example
 
+# Build complete DOCX merge (DOCX → XML → Merge → DOCX)
+complete-docx-merge: $(OBJECTS)
+	@mkdir -p $(BINDIR)
+	$(CC) $(CFLAGS) $(INC) $(PRGDIR)/complete_docx_merge.cpp $^ $(LIBS) -o $(BINDIR)/complete_docx_merge
+
 # Run example merge
 run-example: example-merge
 	@$(BINDIR)/example_merge
@@ -113,4 +118,4 @@ run: main
 clean:
 	$(RM) -r $(OBJDIR)/* $(BINDIR)/*
 
-.PHONY: all main test test-docx test-docx-main run-docx-test test-json-merge test-json-merge-main run-json-merge-test test-xml test-xml-integration run-xml-integration example-merge simple-merge run-example run-simple run clean
+.PHONY: all main test test-docx test-docx-main run-docx-test test-json-merge test-json-merge-main run-json-merge-test test-xml test-xml-integration run-xml-integration example-merge simple-merge complete-docx-merge run-example run-simple run clean

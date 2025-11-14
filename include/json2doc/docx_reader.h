@@ -61,6 +61,24 @@ namespace json2doc
         std::string readDocumentXml();
 
         /**
+         * @brief Write modified XML content back to document.xml
+         *
+         * @param xmlContent The modified XML content to write
+         * @return true if write was successful
+         * @return false if write failed
+         */
+        bool writeDocumentXml(const std::string &xmlContent);
+
+        /**
+         * @brief Recompress the temporary directory back into a DOCX file
+         *
+         * @param outputPath Path where the output DOCX file should be saved
+         * @return true if recompression was successful
+         * @return false if recompression failed
+         */
+        bool recompress(const std::string &outputPath);
+
+        /**
          * @brief Parse the document XML and extract text content
          *
          * @return std::string Extracted text content

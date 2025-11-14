@@ -56,6 +56,12 @@ void createTestDocx(const std::string &filename)
     system(("rm -rf " + tempDir).c_str());
 }
 
+// Helper function to cleanup test files
+void cleanupFile(const std::string &filename)
+{
+    unlink(filename.c_str());
+}
+
 // Helper to check if file exists
 bool fileExists(const std::string &path)
 {
@@ -334,6 +340,109 @@ void testGetTempPath()
     std::cout << "✓ Test 15 passed: getTempPath returns correct path\n";
 }
 
+// Test 16: Write modified XML back to document
+void testWriteDocumentXml()
+{
+    using namespace json2doc;
+
+    std::string testFile = "/tmp/test_write.docx";
+    createTestDocx(testFile);
+
+    DocxReader reader;
+    assert(reader.open(testFile));
+    assert(reader.decompress());
+
+    // Read original XML
+    std::string originalXml = reader.readDocumentXml();
+    assert(!originalXml.empty());
+
+    // Modify XML
+    std::string modifiedXml = originalXml;
+    size_t pos = modifiedXml.find("Test Content");
+    if (pos != std::string::npos)
+    {
+        modifiedXml.replace(pos, 12, "Modified Content");
+    }
+
+    // Write back
+    assert(reader.writeDocumentXml(modifiedXml));
+
+    // Read again to verify
+    std::string readBack = reader.readDocumentXml();
+    assert(readBack.find("Modified Content") != std::string::npos);
+
+    cleanupFile(testFile);
+    std::cout << "✓ Test 16 passed: writeDocumentXml successfully writes XML\n";
+}
+
+// Test 17: Recompress creates valid DOCX
+void testRecompressCreatesDocx()
+{
+    using namespace json2doc;
+
+    std::string testFile = "/tmp/test_recompress.docx";
+    std::string outputFile = "/tmp/test_output.docx";
+    createTestDocx(testFile);
+
+    DocxReader reader;
+    assert(reader.open(testFile));
+    assert(reader.decompress());
+
+    // Recompress
+    assert(reader.recompress(outputFile));
+
+    // Verify output exists and is a zip file
+    struct stat buffer;
+    assert(stat(outputFile.c_str(), &buffer) == 0);
+    assert(buffer.st_size > 0);
+
+    cleanupFile(testFile);
+    cleanupFile(outputFile);
+    std::cout << "✓ Test 17 passed: recompress creates valid DOCX file\n";
+}
+
+// Test 18: Full workflow - Open, Modify, Save
+void testFullWorkflow()
+{
+    using namespace json2doc;
+
+    std::string inputFile = "/tmp/test_workflow_input.docx";
+    std::string outputFile = "/tmp/test_workflow_output.docx";
+    createTestDocx(inputFile);
+
+    DocxReader reader;
+
+    // Open and decompress
+    assert(reader.open(inputFile));
+    assert(reader.decompress());
+
+    // Read XML
+    std::string xml = reader.readDocumentXml();
+    assert(!xml.empty());
+
+    // Modify XML
+    std::string modifiedXml = xml;
+    size_t pos = modifiedXml.find("Test Content");
+    if (pos != std::string::npos)
+    {
+        modifiedXml.replace(pos, 12, "Workflow Test");
+    }
+
+    // Write back
+    assert(reader.writeDocumentXml(modifiedXml));
+
+    // Recompress
+    assert(reader.recompress(outputFile));
+
+    // Verify output exists
+    struct stat buffer;
+    assert(stat(outputFile.c_str(), &buffer) == 0);
+
+    cleanupFile(inputFile);
+    cleanupFile(outputFile);
+    std::cout << "✓ Test 18 passed: Full workflow completes successfully\n";
+}
+
 int main()
 {
     std::cout << "\n╔════════════════════════════════════════════════════════╗\n";
@@ -358,9 +467,12 @@ int main()
         testMultipleOperations();       // Test 13
         testParseEmptyDocument();       // Test 14
         testGetTempPath();              // Test 15
+        testWriteDocumentXml();         // Test 16
+        testRecompressCreatesDocx();    // Test 17
+        testFullWorkflow();             // Test 18
 
         std::cout << "\n╔════════════════════════════════════════════════════════╗\n";
-        std::cout << "║  ✓ All 15 tests passed successfully!                  ║\n";
+        std::cout << "║  ✓ All 18 tests passed successfully!                  ║\n";
         std::cout << "╚════════════════════════════════════════════════════════╝\n\n";
 
         return 0;

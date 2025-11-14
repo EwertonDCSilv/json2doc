@@ -163,6 +163,32 @@ namespace json2doc
         bool isValid() const;
 
         /**
+         * @brief Get XML content of a node by XPath
+         *
+         * @param xpath XPath expression to select node
+         * @return std::string XML content of the node
+         */
+        std::string getNodeXml(const std::string &xpath) const;
+
+        /**
+         * @brief Replace a node with new XML content
+         *
+         * @param xpath XPath expression to select node to replace
+         * @param newXml New XML content
+         * @return true if replacement was successful
+         * @return false if node not found or XML invalid
+         */
+        bool replaceNode(const std::string &xpath, const std::string &newXml);
+
+        /**
+         * @brief Get text content from node by XPath
+         *
+         * @param xpath XPath expression to select node
+         * @return std::string Text content of the node
+         */
+        std::string getTextContent(const std::string &xpath) const;
+
+        /**
          * @brief Get last error message
          *
          * @return std::string Error description

@@ -5,6 +5,7 @@
 #include <algorithm>
 #include <regex>
 #include <cctype>
+#include <iostream>
 
 namespace json2doc
 {
@@ -262,9 +263,13 @@ namespace json2doc
             }
             else if (cleaned[pos] == '[')
             {
-                // Array
+                // Array - extract and parse
                 std::string arr = extractArray(cleaned, pos);
                 jsonData_[fullKey] = arr;
+
+                // Parse array into jsonArrays_
+                parseJsonArray(fullKey, arr);
+
                 pos += arr.length() + 1;
             }
             else
@@ -415,6 +420,286 @@ namespace json2doc
     std::map<std::string, std::string> JsonMerge::getVariableMap() const
     {
         return jsonData_;
+    }
+
+    void JsonMerge::parseJsonArray(const std::string &arrayName, const std::string &arrayString)
+    {
+        std::vector<std::map<std::string, std::string>> items;
+
+        std::string cleaned = trim(arrayString);
+        if (cleaned.empty() || cleaned.front() != '[')
+        {
+            return;
+        }
+
+        size_t pos = 1; // Skip opening [
+
+        while (pos < cleaned.length())
+        {
+            // Skip whitespace
+            while (pos < cleaned.length() && std::isspace(cleaned[pos]))
+            {
+                pos++;
+            }
+
+            if (pos >= cleaned.length() || cleaned[pos] == ']')
+            {
+                break;
+            }
+
+            // Expect an object {
+            if (cleaned[pos] == '{')
+            {
+                std::map<std::string, std::string> item;
+                size_t objStart = pos;
+                size_t objEnd = pos + 1;
+                int braceCount = 1;
+
+                // Find matching closing brace
+                while (objEnd < cleaned.length() && braceCount > 0)
+                {
+                    if (cleaned[objEnd] == '{')
+                    {
+                        braceCount++;
+                    }
+                    else if (cleaned[objEnd] == '}')
+                    {
+                        braceCount--;
+                    }
+                    objEnd++;
+                }
+
+                std::string objStr = cleaned.substr(objStart, objEnd - objStart);
+
+                // Parse object fields
+                size_t fieldPos = 1; // Skip opening {
+                while (fieldPos < objStr.length())
+                {
+                    // Skip whitespace
+                    while (fieldPos < objStr.length() && std::isspace(objStr[fieldPos]))
+                    {
+                        fieldPos++;
+                    }
+
+                    if (fieldPos >= objStr.length() || objStr[fieldPos] == '}')
+                    {
+                        break;
+                    }
+
+                    // Find key
+                    if (objStr[fieldPos] != '"')
+                    {
+                        fieldPos++;
+                        continue;
+                    }
+
+                    size_t keyStart = fieldPos + 1;
+                    size_t keyEnd = objStr.find('"', keyStart);
+                    if (keyEnd == std::string::npos)
+                    {
+                        break;
+                    }
+
+                    std::string key = objStr.substr(keyStart, keyEnd - keyStart);
+                    fieldPos = keyEnd + 1;
+
+                    // Skip to colon
+                    while (fieldPos < objStr.length() && objStr[fieldPos] != ':')
+                    {
+                        fieldPos++;
+                    }
+                    fieldPos++; // Skip colon
+
+                    // Skip whitespace
+                    while (fieldPos < objStr.length() && std::isspace(objStr[fieldPos]))
+                    {
+                        fieldPos++;
+                    }
+
+                    // Extract value
+                    std::string value;
+                    if (objStr[fieldPos] == '"')
+                    {
+                        // String value
+                        size_t valueStart = fieldPos + 1;
+                        size_t valueEnd = objStr.find('"', valueStart);
+                        if (valueEnd != std::string::npos)
+                        {
+                            value = objStr.substr(valueStart, valueEnd - valueStart);
+                            fieldPos = valueEnd + 1;
+                        }
+                    }
+                    else
+                    {
+                        // Number, boolean, or null
+                        size_t valueStart = fieldPos;
+                        while (fieldPos < objStr.length() && objStr[fieldPos] != ',' && objStr[fieldPos] != '}')
+                        {
+                            fieldPos++;
+                        }
+                        value = trim(objStr.substr(valueStart, fieldPos - valueStart));
+                    }
+
+                    item[key] = value;
+
+                    // Skip comma
+                    while (fieldPos < objStr.length() && (objStr[fieldPos] == ',' || std::isspace(objStr[fieldPos])))
+                    {
+                        fieldPos++;
+                    }
+                }
+
+                items.push_back(item);
+                pos = objEnd;
+            }
+
+            // Skip comma and whitespace
+            while (pos < cleaned.length() && (cleaned[pos] == ',' || std::isspace(cleaned[pos])))
+            {
+                pos++;
+            }
+        }
+
+        jsonArrays_[arrayName] = items;
+    }
+
+    std::string JsonMerge::getListName(const std::string &variable) const
+    {
+        // Check if variable contains a dot (e.g., "items.id")
+        size_t dotPos = variable.find('.');
+        if (dotPos != std::string::npos)
+        {
+            std::string listName = variable.substr(0, dotPos);
+            // Check if this list exists in jsonArrays_
+            if (jsonArrays_.find(listName) != jsonArrays_.end())
+            {
+                return listName;
+            }
+        }
+        return "";
+    }
+
+    std::vector<std::map<std::string, std::string>> JsonMerge::getArrayData(const std::string &listName) const
+    {
+        auto it = jsonArrays_.find(listName);
+        if (it != jsonArrays_.end())
+        {
+            return it->second;
+        }
+        return std::vector<std::map<std::string, std::string>>();
+    }
+
+    int JsonMerge::processTablesInXml(XmlDocument &xmlDoc) const
+    {
+        if (!xmlDoc.isValid())
+        {
+            return 0;
+        }
+
+        int totalRowsCreated = 0;
+
+        // Find all table rows in DOCX (w:tr elements)
+        auto allRows = xmlDoc.query("//*[local-name()='tr']");
+
+        for (const auto &row : allRows)
+        {
+            // Get text content of this row to check for list variables
+            std::string rowText = xmlDoc.getTextContent(row.path);
+
+            // Find variables in this row
+            auto variables = findVariables(rowText);
+            if (variables.empty())
+            {
+                continue;
+            }
+
+            // Check if any variable is a list variable
+            std::string listName;
+            std::vector<std::string> listFields;
+
+            for (const auto &var : variables)
+            {
+                std::string currentListName = getListName(var);
+                if (!currentListName.empty())
+                {
+                    if (listName.empty())
+                    {
+                        listName = currentListName;
+                    }
+
+                    // Extract field name (part after the dot)
+                    size_t dotPos = var.find('.');
+                    if (dotPos != std::string::npos)
+                    {
+                        std::string fieldName = var.substr(dotPos + 1);
+                        listFields.push_back(fieldName);
+                    }
+                }
+            }
+
+            // If this row has list variables, process it
+            if (!listName.empty())
+            {
+                auto arrayData = getArrayData(listName);
+                if (arrayData.empty())
+                {
+                    continue;
+                }
+
+                // Get the XML content of the template row
+                std::string templateRowXml = xmlDoc.getNodeXml(row.path);
+                if (templateRowXml.empty())
+                {
+                    continue;
+                }
+
+                // Create new rows for each item in the array
+                std::string newRowsXml;
+                for (const auto &item : arrayData)
+                {
+                    std::string newRow = templateRowXml;
+
+                    // Replace each variable in the row
+                    for (const auto &var : variables)
+                    {
+                        std::string currentListName = getListName(var);
+                        if (currentListName == listName)
+                        {
+                            size_t dotPos = var.find('.');
+                            if (dotPos != std::string::npos)
+                            {
+                                std::string fieldName = var.substr(dotPos + 1);
+                                auto fieldIt = item.find(fieldName);
+                                if (fieldIt != item.end())
+                                {
+                                    std::string placeholder = "{{" + var + "}}";
+                                    std::string value = fieldIt->second;
+
+                                    // Replace all occurrences
+                                    size_t pos = 0;
+                                    while ((pos = newRow.find(placeholder, pos)) != std::string::npos)
+                                    {
+                                        newRow.replace(pos, placeholder.length(), value);
+                                        pos += value.length();
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+                    newRowsXml += newRow;
+                    totalRowsCreated++;
+                }
+
+                // Replace the template row with the new rows
+                if (xmlDoc.replaceNode(row.path, newRowsXml))
+                {
+                    // Success
+                }
+            }
+        }
+
+        return totalRowsCreated;
     }
 
 } // namespace json2doc
