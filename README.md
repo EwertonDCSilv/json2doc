@@ -8,6 +8,23 @@ Lib to transpose json data to document templates
 
 json2doc is a C++ library designed to convert JSON data into various document formats using templates.
 
+### Key Features
+
+- **DocxReader**: Read and parse DOCX files, extract XML content
+- **JsonMerge**: Merge JSON data into document templates with `{{variable}}` placeholders
+- **Template-based**: Use DOCX templates with variables that are automatically replaced with JSON values
+- **Nested JSON Support**: Access nested JSON values with dot notation (e.g., `{{metadata.version}}`)
+
+### Components
+
+1. **DocxReader** - Opens DOCX files, decompresses ZIP, reads and parses XML content
+   - See [DOCX_READER.md](DOCX_READER.md) for details
+   
+2. **JsonMerge** - Finds and replaces `{{variables}}` in templates with JSON data
+   - See [JSON_MERGE_README.md](JSON_MERGE_README.md) for details
+
+3. **Integration** - Combine both to create dynamic documents from templates + data
+
 ## Building the Library
 
 ### Prerequisites
@@ -37,8 +54,14 @@ make clean
 ### Build Targets
 
 - `main`: Build the main program
-- `test`: Build and run the test suite
-- `all`: Build main program and tests
+- `test`: Build and run the json2doc test suite
+- `test-docx`: Build and run DocxReader tests
+- `test-docx-main`: Build DocxReader standalone test program
+- `run-docx-test`: Run DocxReader standalone test
+- `test-json-merge`: Build and run JsonMerge tests (20 TDD tests)
+- `test-json-merge-main`: Build JsonMerge + DocxReader integration test
+- `run-json-merge-test`: Run JsonMerge integration test
+- `all`: Build main program and all tests
 - `run`: Run the main program
 - `clean`: Remove all build artifacts
 
@@ -47,28 +70,42 @@ make clean
 ### Basic Example
 
 ```cpp
-#include <json2doc/json2doc.h>
-#include <json2doc/converter.h>
+#include "json2doc/docx_reader.h"
+#include "json2doc/json_merge.h"
 
 int main() {
-    json2doc::Json2Doc converter;
+    // 1. Read DOCX template with {{variables}}
+    json2doc::DocxReader reader;
+    reader.open("template.docx");
+    reader.decompress();
+    std::string xmlContent = reader.readDocumentXml();
     
-    std::string jsonData = R"({"title": "My Document"})";
-    converter.loadJson(jsonData);
+    // 2. Load JSON data
+    json2doc::JsonMerge merger;
+    merger.loadJson("data.json");
     
-    std::string result = converter.convertToDocument("template.docx");
+    // 3. Merge JSON values into template
+    std::string result = merger.replaceVariables(xmlContent);
+    
+    // 4. Check statistics
+    auto stats = merger.getStats();
+    std::cout << "Replaced: " << stats["replaced"] << " variables\n";
+    
+    reader.cleanup();
     return 0;
 }
 ```
 
-### Running the Program
-
-After building, you can run the main program:
+### Quick Start
 
 ```bash
-make run
-# or directly:
-./bin/main
+# Run all tests
+make test
+make test-docx
+make test-json-merge
+
+# Run integration test (DOCX + JSON merge)
+make run-json-merge-test
 ```
 
 ## Project Structure

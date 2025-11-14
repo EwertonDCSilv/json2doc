@@ -48,8 +48,25 @@ run-docx-test: test-docx-main
 	@echo "Running DocxReader standalone test..."
 	@$(BINDIR)/test_docx_reader_main
 
+# Build and run JsonMerge tests
+test-json-merge: $(OBJECTS)
+	@mkdir -p $(BINDIR)
+	$(CC) $(CFLAGS) $(INC) $(TSTDIR)/test_json_merge.cpp $^ -o $(BINDIR)/test_json_merge
+	@echo "Running JsonMerge tests..."
+	@$(BINDIR)/test_json_merge
+
+# Build JsonMerge + DocxReader integration test program
+test-json-merge-main: $(OBJECTS)
+	@mkdir -p $(BINDIR)
+	$(CC) $(CFLAGS) $(INC) program/test_json_merge_docx.cpp $^ -o $(BINDIR)/test_json_merge_docx
+
+# Run JsonMerge + DocxReader integration test
+run-json-merge-test: test-json-merge-main
+	@echo "Running JsonMerge + DocxReader integration test..."
+	@$(BINDIR)/test_json_merge_docx
+
 # Build all
-all: main test test-docx
+all: main test test-docx test-json-merge
 
 # Run main program
 run: main
@@ -59,4 +76,4 @@ run: main
 clean:
 	$(RM) -r $(OBJDIR)/* $(BINDIR)/*
 
-.PHONY: all main test test-docx test-docx-main run-docx-test run clean
+.PHONY: all main test test-docx test-docx-main run-docx-test test-json-merge test-json-merge-main run-json-merge-test run clean

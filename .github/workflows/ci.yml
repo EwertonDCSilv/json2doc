@@ -34,6 +34,15 @@ jobs:
       - name: Test DocxReader with sample file
         run: ./bin/test_docx_reader_main
 
+      - name: Run JsonMerge tests
+        run: make test-json-merge
+
+      - name: Build JsonMerge integration test
+        run: make test-json-merge-main
+
+      - name: Test JsonMerge with DocxReader integration
+        run: ./bin/test_json_merge_docx
+
       - name: Archive test artifacts
         if: always()
         uses: actions/upload-artifact@v4
