@@ -49,6 +49,9 @@ CMakeCache.txt
 cmake_install.cmake
 *.cmake
 
+# Temporary extracted XML files
+temp_extracted_xml/
+
 # IDE files
 .vscode/
 .idea/

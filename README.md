@@ -1,5 +1,7 @@
 # json2doc
 
+[![CI - Build and Test](https://github.com/EwertonDCSilv/json2doc/actions/workflows/ci.yml/badge.svg)](https://github.com/EwertonDCSilv/json2doc/actions/workflows/ci.yml)
+
 Lib to transpose json data to document templates
 
 ## Description

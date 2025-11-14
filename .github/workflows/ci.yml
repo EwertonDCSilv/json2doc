@@ -1,0 +1,51 @@
+name: CI - Build and Test
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main, develop]
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y g++ make unzip zip
+
+      - name: Build project
+        run: make all
+
+      - name: Run json2doc tests
+        run: make test
+
+      - name: Run DocxReader tests
+        run: make test-docx
+
+      - name: Build DocxReader standalone test
+        run: make test-docx-main
+
+      - name: Test DocxReader with sample file
+        run: ./bin/test_docx_reader_main
+
+      - name: Archive test artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-artifacts
+          path: |
+            bin/
+            temp_extracted_xml/
+          retention-days: 7
+
+      - name: Display test summary
+        if: success()
+        run: |
+          echo "✅ All tests passed successfully!"
+          echo "Build artifacts available in bin/"
