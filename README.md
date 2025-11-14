@@ -10,39 +10,39 @@ json2doc is a C++ library designed to convert JSON data into various document fo
 
 ### Prerequisites
 
-- CMake 3.10 or higher
-- C++17 compatible compiler (GCC 7+, Clang 5+, MSVC 2017+)
+- GNU Make
+- C++17 compatible compiler (GCC 7+, Clang 5+)
 
 ### Build Instructions
 
 ```bash
-# Create build directory
-mkdir build
-cd build
+# Build the library
+make lib
 
-# Configure
-cmake ..
+# Build and run tests
+make test
 
-# Build
-cmake --build .
+# Build examples
+make example
 
-# Run tests (optional)
-ctest
+# Build everything (library, tests, and examples)
+make all
 
-# Install (optional)
-sudo cmake --install .
+# Run the example program
+make run
+
+# Clean build artifacts
+make clean
 ```
 
-### Build Options
+### Build Targets
 
-- `BUILD_EXAMPLES`: Build example programs (default: ON)
-- `BUILD_TESTS`: Build test suite (default: ON)
-
-To disable examples or tests:
-
-```bash
-cmake -DBUILD_EXAMPLES=OFF -DBUILD_TESTS=OFF ..
-```
+- `lib`: Build the static library (libjson2doc.a)
+- `test`: Build and run the test suite
+- `example`: Build the example programs
+- `all`: Build library, tests, and examples
+- `run`: Run the example program
+- `clean`: Remove all build artifacts
 
 ## Usage
 
@@ -68,7 +68,9 @@ int main() {
 After building, you can run the example program:
 
 ```bash
-./build/examples/example_usage
+make run
+# or directly:
+./bin/example_usage
 ```
 
 ## Project Structure
@@ -80,9 +82,14 @@ json2doc/
 ├── src/              # Source files
 ├── examples/         # Example programs
 ├── tests/            # Test files
-├── CMakeLists.txt    # Main build configuration
+├── Makefile          # Build configuration
 └── README.md         # This file
 ```
+
+Build artifacts are placed in:
+- `build/` - Object files
+- `lib/` - Compiled library (libjson2doc.a)
+- `bin/` - Executable binaries
 
 ## License
 
