@@ -1,0 +1,26 @@
+# IWYU General Mapping File for json2doc
+
+# Keep necessary includes even if IWYU suggests removal
+# IWYU pragma: keep
+
+# Export includes for other files that depend on them
+# IWYU pragma: export
+
+# Make the header private, but allow inclusion by this name
+# IWYU pragma: private, include "json2doc/xml_document.h"
+
+# Example: For each project header, add a line like below
+# IWYU pragma: private, include "json2doc/json2doc.h"
+# IWYU pragma: private, include "json2doc/args_parser.h"
+# IWYU pragma: private, include "json2doc/docx_reader.h"
+# IWYU pragma: private, include "json2doc/json_merge.h"
+# IWYU pragma: private, include "json2doc/converter.h"
+# IWYU pragma: private, include "json2doc/help.h"
+
+# For third-party headers, if needed:
+# IWYU pragma: export
+
+# To keep includes in specific files:
+# IWYU pragma: keep
+
+# Add specific rules as your project grows.

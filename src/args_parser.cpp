@@ -2,8 +2,9 @@
 #include <cstring>
 
 /**
- * @author Ewerton Silva Santos <ewerton_dc@hotmail.com> - GitHub: EwertonDCSilv
  * @brief Command-line arguments parser for json2doc CLI
+ *
+ * @author Ewerton Silva Santos <ewerton_dc@hotmail.com> - GitHub: EwertonDCSilv
  * @namespace json2doc
  * @details
  * This class handles parsing of command-line arguments for the json2doc
@@ -13,6 +14,7 @@ namespace json2doc
 {
     /**
      * @brief Construct a new ArgsParser object and parse arguments
+     *
      * @param argc Argument count
      * @param argv Argument vector
      */
@@ -23,6 +25,7 @@ namespace json2doc
 
     /**
      * @brief Parse command-line arguments
+     *
      * @param argc Argument count
      * @param argv Argument vector
      */
@@ -84,6 +87,7 @@ namespace json2doc
 
     /**
      * @brief Check if argument is an option (starts with - or --)
+     *
      * @param arg The argument string
      * @return true if it's an option
      * @return false otherwise
@@ -95,6 +99,7 @@ namespace json2doc
 
     /**
      * @brief Check if a flag is set
+     *
      * @param flag The flag name
      * @return true if the flag is set
      * @return false otherwise
@@ -107,6 +112,7 @@ namespace json2doc
 
     /**
      * @brief Get the value of an option
+     *
      * @param option The option name
      * @return std::string The option value or empty string if not found
      */
@@ -122,6 +128,7 @@ namespace json2doc
 
     /**
      * @brief Check if the parsed arguments are valid
+     *
      * @return true if valid
      * @return false otherwise
      */
@@ -132,6 +139,7 @@ namespace json2doc
 
     /**
      * @brief Get the error message if parsing failed
+     *
      * @return std::string The error message
      */
     std::string ArgsParser::getErrorMessage() const

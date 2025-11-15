@@ -11,7 +11,6 @@
 
 int main(int argc, char *argv[])
 {
-    // Variable declarations (hoisting)
     json2doc::Json2Doc converter;
     std::string jsonData;
     std::string templatePath;
@@ -19,25 +18,20 @@ int main(int argc, char *argv[])
     std::string result;
     std::ifstream jsonFile;
     std::stringstream buffer;
-
-    // Parse arguments
     json2doc::ArgsParser args(argc, argv);
 
-    // Check for help flag
     if (args.hasFlag("help"))
     {
         std::cout << json2doc::Help::getHelpMessage();
         return 0;
     }
 
-    // Check for version flag
     if (args.hasFlag("version"))
     {
         std::cout << "JSON2Doc version " << converter.getVersion() << "\n";
         return 0;
     }
 
-    // Check if arguments are valid
     if (!args.isValid())
     {
         std::cerr << "❌ Error: " << args.getErrorMessage() << "\n\n";
@@ -46,7 +40,6 @@ int main(int argc, char *argv[])
         return 1;
     }
 
-    // Get required options
     templatePath = args.getValue("doc");
     if (templatePath.empty())
     {
@@ -59,7 +52,6 @@ int main(int argc, char *argv[])
         jsonFilePath = args.getValue("j");
     }
 
-    // Validate required options
     if (templatePath.empty())
     {
         std::cerr << "❌ Error: Missing required arguments\n\n";
@@ -75,11 +67,10 @@ int main(int argc, char *argv[])
         return 1;
     }
 
+    // Run conversion
     std::cout << "┌────────────────────────────────────────┐\n";
     std::cout << "│      JSON2Doc - Document Converter     │\n";
     std::cout << "└────────────────────────────────────────┘\n\n";
-
-    // Display version
     std::cout << "📦 Version: " << converter.getVersion() << "\n\n";
 
     // Read JSON file
