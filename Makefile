@@ -1,3 +1,4 @@
+NAME := json2doc
 CC := g++
 SRCDIR := src
 TSTDIR := tests
