@@ -21,8 +21,14 @@
 void createTestDocx(const std::string &filename)
 {
     std::string tempDir = "/tmp/test_docx_create_" + std::to_string(getpid());
-    system(("mkdir -p " + tempDir + "/word").c_str());
-    system(("mkdir -p " + tempDir + "/_rels").c_str());
+    if (!system(("mkdir -p " + tempDir + "/word").c_str()))
+    {
+        printf("Created directory %s/word\n", tempDir.c_str());
+    }
+    if (!system(("mkdir -p " + tempDir + "/_rels").c_str()))
+    {
+        printf("Created directory %s/_rels\n", tempDir.c_str());
+    }
 
     // Create document.xml
     std::ofstream docXml(tempDir + "/word/document.xml");

@@ -59,11 +59,18 @@ int main(int argc, char *argv[])
     }
 
     // Validate required options
-    if (templatePath.empty() || jsonFilePath.empty())
+    if (templatePath.empty())
     {
         std::cerr << "❌ Error: Missing required arguments\n\n";
         std::cerr << json2doc::Help::getUsageMessage(argv[0]);
-        std::cerr << "\nTip: Both --doc and --json are required\n";
+        std::cerr << "\nTip: Both --doc isrequired\n";
+        return 1;
+    }
+    if (jsonFilePath.empty())
+    {
+        std::cerr << "❌ Error: Missing required arguments\n\n";
+        std::cerr << json2doc::Help::getUsageMessage(argv[0]);
+        std::cerr << "\nTip: Both --json is required\n";
         return 1;
     }
 
