@@ -2,6 +2,7 @@ CC := g++
 SRCDIR := src
 TSTDIR := tests
 PRGDIR := program
+EXAMPLEDIR := examples/programs
 OBJDIR := build
 BINDIR := bin
 
@@ -57,13 +58,13 @@ test-docx: $(OBJECTS)
 # Build DocxReader standalone test program
 test-docx-main: $(OBJECTS)
 	@mkdir -p $(BINDIR)
-	$(CC) $(CFLAGS) $(INC) program/test_docx_reader.cpp $^ $(LIBS) -o $(BINDIR)/test_docx_reader_main
+	$(CC) $(CFLAGS) $(INC) $(EXAMPLEDIR)/test_docx_reader.cpp $^ $(LIBS) -o $(BINDIR)/test_docx_reader_main
 
 
 # Build XmlDocument integration demo
 test-xml-integration: $(OBJECTS)
 	@mkdir -p $(BINDIR)
-	$(CC) $(CFLAGS) $(INC) program/test_xml_integration.cpp $^ $(LIBS) -o $(BINDIR)/test_xml_integration
+	$(CC) $(CFLAGS) $(INC) $(EXAMPLEDIR)/test_xml_integration.cpp $^ $(LIBS) -o $(BINDIR)/test_xml_integration
 
 
 # Build and run XmlDocument tests
@@ -85,25 +86,25 @@ test-json-merge: $(OBJECTS)
 # Build JsonMerge + DocxReader integration test program
 test-json-merge-main: $(OBJECTS)
 	@mkdir -p $(BINDIR)
-	$(CC) $(CFLAGS) $(INC) program/test_json_merge_docx.cpp $^ $(LIBS) -o $(BINDIR)/test_json_merge_docx
+	$(CC) $(CFLAGS) $(INC) $(EXAMPLEDIR)/test_json_merge_docx.cpp $^ $(LIBS) -o $(BINDIR)/test_json_merge_docx
 
 
 # Build example merge program
 example-merge: $(OBJECTS)
 	@mkdir -p $(BINDIR)
-	$(CC) $(CFLAGS) $(INC) $(PRGDIR)/example_merge.cpp $^ $(LIBS) -o $(BINDIR)/example_merge
+	$(CC) $(CFLAGS) $(INC) $(EXAMPLEDIR)/example_merge.cpp $^ $(LIBS) -o $(BINDIR)/example_merge
 
 
 # Build simple merge example
 simple-merge: $(OBJECTS)
 	@mkdir -p $(BINDIR)
-	$(CC) $(CFLAGS) $(INC) $(PRGDIR)/simple_merge_example.cpp $^ $(LIBS) -o $(BINDIR)/simple_merge_example
+	$(CC) $(CFLAGS) $(INC) $(EXAMPLEDIR)/simple_merge_example.cpp $^ $(LIBS) -o $(BINDIR)/simple_merge_example
 
 
 # Build complete DOCX merge (DOCX → XML → Merge → DOCX)
 complete-docx-merge: $(OBJECTS)
 	@mkdir -p $(BINDIR)
-	$(CC) $(CFLAGS) $(INC) $(PRGDIR)/complete_docx_merge.cpp $^ $(LIBS) -o $(BINDIR)/complete_docx_merge
+	$(CC) $(CFLAGS) $(INC) $(EXAMPLEDIR)/complete_docx_merge.cpp $^ $(LIBS) -o $(BINDIR)/complete_docx_merge
 
 
 #################################################################
