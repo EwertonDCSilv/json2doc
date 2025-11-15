@@ -1,10 +1,10 @@
 #ifndef XML_DOCUMENT_H
 #define XML_DOCUMENT_H
 
-#include <string>
-#include <vector>
 #include <map>
 #include <memory>
+#include <string>
+#include <vector>
 
 namespace json2doc
 {
