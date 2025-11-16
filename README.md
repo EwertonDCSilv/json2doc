@@ -165,3 +165,47 @@ Build artifacts are placed in:
 ## License
 
 See LICENSE file for details.
+
+
+## Automatic Include-What-You-Use (IWYU) on Save in VS Code
+
+To automatically run IWYU every time you save a `.cpp` file in VS Code:
+
+### 1. Install IWYU
+
+On Ubuntu/Debian:
+```bash
+sudo apt-get install iwyu
+```
+
+### 2. Install the "Run On Save" Extension
+
+Search for **emeraldwalk.runonsave** in the VS Code Extensions Marketplace and install it.
+
+### 3. Configure VS Code
+
+Add the following to your `.vscode/settings.json`:
+
+```json
+{
+    "emeraldwalk.runonsave": {
+        "commands": [
+            {
+                "match": "\\.cpp$",
+                "cmd": "include-what-you-use ${file} -Iinclude -Xiwyu --mapping_file=iwyu.imp"
+            }
+        ]
+    }
+}
+```
+
+- This will run IWYU on every `.cpp` file you save.
+- Adjust the `-Iinclude` and `--mapping_file=iwyu.imp` paths if needed for your project structure.
+
+### 4. (Optional) Run on Header Files
+
+To also run on `.h` files, add another command block with `"match": "\\.h$"`.
+
+---
+
+**Now, IWYU will analyze your includes and suggest improvements automatically whenever you save a source file!**

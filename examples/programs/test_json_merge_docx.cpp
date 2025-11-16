@@ -184,7 +184,7 @@ int main(int argc, char *argv[])
     {
         std::cout << "✓ JSON loaded successfully\n";
         std::cout << "📊 Available keys: " << merger.getAllKeys().size() << "\n";
-        
+
         std::cout << "\nJSON Keys:\n";
         for (const auto &key : merger.getAllKeys())
         {
@@ -195,7 +195,7 @@ int main(int argc, char *argv[])
     // Step 3: Find variables in XML
     printSeparator("Step 3: Finding Template Variables");
     std::vector<std::string> variables = merger.findVariables(xmlContent);
-    
+
     std::cout << "✓ Found " << variables.size() << " variable placeholders:\n";
     for (const auto &var : variables)
     {
@@ -213,7 +213,7 @@ int main(int argc, char *argv[])
     // Step 4: Merge JSON into XML
     printSeparator("Step 4: Merging JSON Data into XML");
     std::string mergedXml = merger.replaceVariables(xmlContent);
-    
+
     auto stats = merger.getStats();
     std::cout << "✓ Merge complete:\n";
     std::cout << "  • Variables found: " << stats["found"] << "\n";
@@ -222,7 +222,7 @@ int main(int argc, char *argv[])
 
     // Step 5: Save results
     printSeparator("Step 5: Saving Results");
-    
+
     // Create output directory
     std::string outputDir = "temp_extracted_xml";
     system(("mkdir -p " + outputDir).c_str());
@@ -262,7 +262,7 @@ int main(int argc, char *argv[])
 
     // Extract and display text content
     printSeparator("Step 6: Extracted Text Content");
-    
+
     // Parse merged content to show final text
     std::cout << "Original template text:\n";
     std::cout << "─────────────────────────────────────────\n";

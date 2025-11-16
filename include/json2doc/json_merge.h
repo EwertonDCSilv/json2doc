@@ -150,8 +150,36 @@ namespace json2doc
          */
         std::map<std::string, std::string> getVariableMap() const;
 
+        /**
+         * @brief Process tables in XmlDocument, expanding rows with list data
+         *
+         * This method identifies tables with template rows containing variables like {{items.field}},
+         * removes the template row, and creates new rows for each item in the JSON list.
+         *
+         * @param xmlDoc The XmlDocument to process
+         * @return int Number of table rows created
+         */
+        int processTablesInXml(XmlDocument &xmlDoc) const;
+
+        /**
+         * @brief Check if a variable represents a list path (e.g., "items.field")
+         *
+         * @param variable Variable name to check
+         * @return std::string The list name if it's a list variable, empty otherwise
+         */
+        std::string getListName(const std::string &variable) const;
+
+        /**
+         * @brief Get array data from JSON by key
+         *
+         * @param listName Name of the array in JSON
+         * @return std::vector<std::map<std::string, std::string>> Vector of objects in the array
+         */
+        std::vector<std::map<std::string, std::string>> getArrayData(const std::string &listName) const;
+
     private:
         std::map<std::string, std::string> jsonData_;
+        std::map<std::string, std::vector<std::map<std::string, std::string>>> jsonArrays_;
         std::string lastError_;
         mutable std::map<std::string, int> lastStats_;
 
@@ -207,6 +235,14 @@ namespace json2doc
          * @return std::string The extracted array content
          */
         std::string extractArray(const std::string &jsonString, size_t startPos) const;
+
+        /**
+         * @brief Parse JSON array into jsonArrays_ map
+         *
+         * @param arrayName Name of the array
+         * @param arrayString JSON array content
+         */
+        void parseJsonArray(const std::string &arrayName, const std::string &arrayString);
     };
 
 } // namespace json2doc

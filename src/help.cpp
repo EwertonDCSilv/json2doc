@@ -1,6 +1,14 @@
 #include "json2doc/help.h"
 #include <sstream>
 
+/**
+ * @author Ewerton Silva Santos <ewerton_dc@hotmai.com> - GitHub: EwertonDCSilv
+ * @brief Help and usage message generator for json2doc CLI
+ * @namespace json2doc
+ * @details
+ * This class provides static methods to generate usage and help messages
+ * for the json2doc command-line interface (CLI) tool.
+ */
 namespace json2doc
 {
 

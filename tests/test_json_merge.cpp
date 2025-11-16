@@ -93,13 +93,13 @@ void testGetValue()
     std::cout << "Test 4: Get value by key... ";
     json2doc::JsonMerge merger;
     merger.loadJsonString(createSimpleJson());
-    
+
     std::string name = merger.getValue("name");
     assert(name == "John Doe");
-    
+
     std::string title = merger.getValue("title");
     assert(title == "Software Engineer");
-    
+
     std::cout << "✓ PASSED\n";
 }
 
@@ -109,13 +109,13 @@ void testGetNestedValue()
     std::cout << "Test 5: Get nested value with dot notation... ";
     json2doc::JsonMerge merger;
     merger.loadJsonString(createNestedJson());
-    
+
     std::string version = merger.getValue("metadata.version");
     assert(version == "1.0.0");
-    
+
     std::string status = merger.getValue("metadata.status");
     assert(status == "draft");
-    
+
     std::cout << "✓ PASSED\n";
 }
 
@@ -125,10 +125,10 @@ void testGetNonExistentKey()
     std::cout << "Test 6: Get non-existent key returns empty string... ";
     json2doc::JsonMerge merger;
     merger.loadJsonString(createSimpleJson());
-    
+
     std::string missing = merger.getValue("nonexistent");
     assert(missing.empty());
-    
+
     std::cout << "✓ PASSED\n";
 }
 
@@ -138,10 +138,10 @@ void testHasKey()
     std::cout << "Test 7: hasKey returns correct boolean... ";
     json2doc::JsonMerge merger;
     merger.loadJsonString(createSimpleJson());
-    
+
     assert(merger.hasKey("name") == true);
     assert(merger.hasKey("nonexistent") == false);
-    
+
     std::cout << "✓ PASSED\n";
 }
 
@@ -150,15 +150,15 @@ void testFindVariables()
 {
     std::cout << "Test 8: Find variables in text... ";
     json2doc::JsonMerge merger;
-    
+
     std::string text = "Hello {{name}}, your title is {{title}} and date is {{date}}.";
     std::vector<std::string> vars = merger.findVariables(text);
-    
+
     assert(vars.size() == 3);
     assert(std::find(vars.begin(), vars.end(), "name") != vars.end());
     assert(std::find(vars.begin(), vars.end(), "title") != vars.end());
     assert(std::find(vars.begin(), vars.end(), "date") != vars.end());
-    
+
     std::cout << "✓ PASSED\n";
 }
 
@@ -167,12 +167,12 @@ void testFindVariablesWithSpaces()
 {
     std::cout << "Test 9: Find variables with spaces... ";
     json2doc::JsonMerge merger;
-    
+
     std::string text = "Value: {{ name }}, {{ title }}";
     std::vector<std::string> vars = merger.findVariables(text);
-    
+
     assert(vars.size() == 2);
-    
+
     std::cout << "✓ PASSED\n";
 }
 
@@ -181,12 +181,12 @@ void testFindNoVariables()
 {
     std::cout << "Test 10: Find no variables in plain text... ";
     json2doc::JsonMerge merger;
-    
+
     std::string text = "This is plain text without variables.";
     std::vector<std::string> vars = merger.findVariables(text);
-    
+
     assert(vars.empty());
-    
+
     std::cout << "✓ PASSED\n";
 }
 
@@ -196,12 +196,12 @@ void testReplaceSimpleVariables()
     std::cout << "Test 11: Replace simple variables... ";
     json2doc::JsonMerge merger;
     merger.loadJsonString(createSimpleJson());
-    
+
     std::string template_text = "Name: {{name}}, Title: {{title}}";
     std::string result = merger.replaceVariables(template_text);
-    
+
     assert(result == "Name: John Doe, Title: Software Engineer");
-    
+
     std::cout << "✓ PASSED\n";
 }
 
@@ -211,12 +211,12 @@ void testReplaceNestedVariables()
     std::cout << "Test 12: Replace nested variables... ";
     json2doc::JsonMerge merger;
     merger.loadJsonString(createNestedJson());
-    
+
     std::string template_text = "Version: {{metadata.version}}, Status: {{metadata.status}}";
     std::string result = merger.replaceVariables(template_text);
-    
+
     assert(result == "Version: 1.0.0, Status: draft");
-    
+
     std::cout << "✓ PASSED\n";
 }
 
@@ -226,14 +226,14 @@ void testReplaceMissingVariables()
     std::cout << "Test 13: Replace with missing variables... ";
     json2doc::JsonMerge merger;
     merger.loadJsonString(createSimpleJson());
-    
+
     std::string template_text = "Name: {{name}}, Missing: {{missing}}";
     std::string result = merger.replaceVariables(template_text);
-    
+
     // Missing variables should remain unchanged
     assert(result.find("{{missing}}") != std::string::npos);
     assert(result.find("John Doe") != std::string::npos);
-    
+
     std::cout << "✓ PASSED\n";
 }
 
@@ -243,15 +243,15 @@ void testGetStats()
     std::cout << "Test 14: Get statistics after replacement... ";
     json2doc::JsonMerge merger;
     merger.loadJsonString(createSimpleJson());
-    
+
     std::string template_text = "{{name}} {{title}} {{missing}}";
     merger.replaceVariables(template_text);
-    
+
     auto stats = merger.getStats();
     assert(stats["found"] == 3);
     assert(stats["replaced"] == 2);
     assert(stats["missing"] == 1);
-    
+
     std::cout << "✓ PASSED\n";
 }
 
@@ -261,14 +261,14 @@ void testClear()
     std::cout << "Test 15: Clear data... ";
     json2doc::JsonMerge merger;
     merger.loadJsonString(createSimpleJson());
-    
+
     assert(!merger.getAllKeys().empty());
-    
+
     merger.clear();
-    
+
     assert(merger.getAllKeys().empty());
     assert(merger.getLastError().empty());
-    
+
     std::cout << "✓ PASSED\n";
 }
 
@@ -277,10 +277,10 @@ void testLoadJsonFile()
 {
     std::cout << "Test 16: Load JSON from file... ";
     json2doc::JsonMerge merger;
-    
+
     // Use the existing data.json file
     bool loaded = merger.loadJson("data.json");
-    
+
     if (loaded)
     {
         assert(!merger.getAllKeys().empty());
@@ -298,21 +298,21 @@ void testReplaceInXmlContent()
     std::cout << "Test 17: Replace variables in XML-like content... ";
     json2doc::JsonMerge merger;
     merger.loadJsonString(createComplexJson());
-    
+
     std::string xmlTemplate = R"(<w:document>
         <w:p><w:t>Title: {{title}}</w:t></w:p>
         <w:p><w:t>Author: {{author}}</w:t></w:p>
         <w:p><w:t>Date: {{date}}</w:t></w:p>
         <w:p><w:t>Version: {{metadata.version}}</w:t></w:p>
     </w:document>)";
-    
+
     std::string result = merger.replaceVariables(xmlTemplate);
-    
+
     assert(result.find("Title: Sample Document") != std::string::npos);
     assert(result.find("Author: John Doe") != std::string::npos);
     assert(result.find("Date: November 14, 2025") != std::string::npos);
     assert(result.find("Version: 1.0.0") != std::string::npos);
-    
+
     std::cout << "✓ PASSED\n";
 }
 
@@ -322,12 +322,12 @@ void testGetAllKeys()
     std::cout << "Test 18: Get all keys... ";
     json2doc::JsonMerge merger;
     merger.loadJsonString(createNestedJson());
-    
+
     std::vector<std::string> keys = merger.getAllKeys();
     assert(!keys.empty());
     assert(std::find(keys.begin(), keys.end(), "author") != keys.end());
     assert(std::find(keys.begin(), keys.end(), "position") != keys.end());
-    
+
     std::cout << "✓ PASSED\n";
 }
 
@@ -337,12 +337,12 @@ void testMultipleReplacements()
     std::cout << "Test 19: Multiple replacements of same variable... ";
     json2doc::JsonMerge merger;
     merger.loadJsonString(createSimpleJson());
-    
+
     std::string template_text = "{{name}} is {{name}}, {{name}}!";
     std::string result = merger.replaceVariables(template_text);
-    
+
     assert(result == "John Doe is John Doe, John Doe!");
-    
+
     std::cout << "✓ PASSED\n";
 }
 
@@ -352,12 +352,12 @@ void testEmptyTemplate()
     std::cout << "Test 20: Empty template... ";
     json2doc::JsonMerge merger;
     merger.loadJsonString(createSimpleJson());
-    
+
     std::string template_text = "";
     std::string result = merger.replaceVariables(template_text);
-    
+
     assert(result.empty());
-    
+
     std::cout << "✓ PASSED\n";
 }
 
