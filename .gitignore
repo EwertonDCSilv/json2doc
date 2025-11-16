@@ -63,3 +63,7 @@ temp_extracted_xml/
 _codeql_detected_source_root/
 
 Makefile.wasm
+*.js
+*.html
+*.wasm
+.*bindings.cpp
